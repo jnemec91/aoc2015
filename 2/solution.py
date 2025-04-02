@@ -3,12 +3,10 @@ with open("input.txt") as f:
 
 
 def calculate(l,w,h):
-    sides = [
-        2*(l*w),
-        2*(w*h),
-        2*(h*l)
-    ]
-    return sum(sides) + int(min(sides)/2)
+    dim = [l,w,h]
+    a = dim.pop(dim.index(max(dim)))
+
+    return sum([i*2 for i in dim])+(l*w*h)
 
 total = 0
 for i in input:
