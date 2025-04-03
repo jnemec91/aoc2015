@@ -4,7 +4,7 @@ import re
 class LightMap:
     """Map of christmas lights on your house"""
     def __init__(self, size:int) -> None:
-        self.lights = [['-' for j in range(size)] for i in range(size)]
+        self.lights = [[0 for j in range(size)] for i in range(size)]
     
     def light_up_rect(self, x1:int,x2:int,y1:int,y2:int,toggle:bool=False) -> None:
         """
@@ -14,25 +14,24 @@ class LightMap:
         for i in range(x1,x2+1):
             for j in range(y1,y2+1):
                 if toggle:
-                    if self.lights[i][j] == 'X':
-                        self.lights[i][j] = '-'
-                    else:
-                        self.lights[i][j] = 'X'
+                    self.lights[i][j] += 2
                 else:
-                    self.lights[i][j] = 'X'
+                    self.lights[i][j] += 1
 
     def switch_off_rect(self, x1:int,x2:int,y1:int,y2:int) -> None:
         """switches of some bulbs on your light map"""
         for i in range(x1,x2+1):
             for j in range(y1,y2+1):
-                    self.lights[i][j] = '-'
+                if self.lights[i][j] > 0:
+                    self.lights[i][j] -= 1
 
-    def get_num_of_lights_on(self) -> int:
+    def get_total_brightness(self) -> int:
         """counts all lights that are on at the moment"""
         counter = 0
         for line in self.lights:
-            count = Counter(line)
-            counter += count['X']
+            for light in line:
+                if light > 0:
+                    counter += light
         return counter
 
 if __name__ == '__main__':
@@ -56,7 +55,5 @@ if __name__ == '__main__':
                 lm.switch_off_rect(x1,x2,y1,y2)
             print(f'instruction {current_instruction}-{line}: coordinates: {(x1,x2)}, {(y1,y2)}\n')
 
-        # for light_line in lm.lights:
-        #     print("".join(light_line))
-        
-        print(f'Part 1: {lm.get_num_of_lights_on()}')
+
+        print(f'Part 2: {lm.get_total_brightness()}')
